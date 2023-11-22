@@ -1,27 +1,14 @@
-- name: Capture POSTs from gitea
+---
+- name: Respond to webhook POST
   hosts: all
   sources:
     - ansible.eda.webhook:
         host: 0.0.0.0
         port: 5000
-      filters:
-        - ansible.eda.json_filter:
-            exclude_keys: ['sender', 'owner']
-        - ansible.eda.dashes_to_underscores:
+
   rules:
-    - name: Debug payload
-      condition: true
+    - name: R1 - Heard "Hello!"
+      condition: event.payload.message == "Hello!"
       action:
         debug:
-
-    - name: IaC - Deploy new VM
-      condition: event.body.headers.application == "instruqt" and event.body.body.type == "sandbox.failed"
-      action:
-        run_job_template:
-          name: [AZ] Virtual Machine
-          organization: Automation Everywhere
-          job_args:
-            extra_vars:
-              app_name: "{{ event.body.body.track_id }}"
-              timestamp: "{{ event.body.body.timestamp }}"
-              participant_id: "{{ event.body.body.participant_id }}"
+          var: event.payload
