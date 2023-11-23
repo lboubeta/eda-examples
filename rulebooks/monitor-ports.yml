@@ -12,7 +12,7 @@
       action:
         run_job_template:
           name: "[EDA] Open Port"
-          organization: "Automation Everywhere"
+          organization: Automation Everywhere
           job_args:
             extra_vars:
               eda_host: "{{ event.payload.host }}"
