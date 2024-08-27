@@ -10,5 +10,5 @@
     - name: Andrius's birthday
       condition: event.alert.labels.severity == "event_trigger" and event.alert.status == "firing"
       action:
-        run_playbook:
-          name: thanks.yml
+        debug:
+          msg: "Happy Birthday"
