@@ -1,0 +1,22 @@
+---
+# Nombre del Rulebook
+name: "Nagios Alert Rulebook"
+hosts: localhost
+sources:
+  - ansible.eda.webhook:
+      host: 0.0.0.0  # Escucha en todas las interfaces
+      port: 3300     # Puerto 3300
+
+rules:
+  - name: "Procesar alerta de Nagios"
+    condition: >-
+      event.hostname is defined and
+      event.service is defined and
+      event.state is defined
+    action:
+      # Aquí llamamos a un job template en AAP
+      run_job_template:
+        name: "[APP] Restart Tomcat"  # Sustituye con el nombre del job template
+        organization: "Default"          # Organización en AAP
+        extra_vars:
+          affected_host: "{{ event.hostname }}"  # Pasamos el host afectado como variable
